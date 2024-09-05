@@ -1,10 +1,11 @@
 # Use Debian as the base image
 FROM debian:bullseye-slim
 
-# Install dependencies
+# Install dependencies, including git
 RUN apt-get update && apt-get install -y \
     curl \
     wget \
+    git \
     ca-certificates \
     gnupg2 \
     && rm -rf /var/lib/apt/lists/*
