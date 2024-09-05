@@ -31,17 +31,17 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}/3xui-build/3x-ui:latest
+          tags: ghcr.io/${{ github.repository }}/3x-ui:latest
 
       - name: Run Docker container for basic debugging
         run: |
-          docker run --rm ghcr.io/${{ github.repository }}/3xui-build/3x-ui:latest \
+          docker run --rm ghcr.io/${{ github.repository }}/3x-ui:latest \
           && echo "Docker container çalıştırıldı!" \
           || echo "Docker container başlatılamadı. Hata ayıklama gerekebilir."
 
       - name: Check if container starts properly
         run: |
-          docker inspect --format='{{.State.Running}}' ghcr.io/${{ github.repository }}/3xui-build/3x-ui:latest \
+          docker inspect --format='{{.State.Running}}' ghcr.io/${{ github.repository }}/3x-ui:latest \
           && echo "Container is running." \
           || echo "Container is not running."
 
