@@ -1,23 +1,16 @@
-name: Docker Build
+name: Docker and KVM Test
 
 on:
+  # Haftada bir kez veya bir push olduğunda çalışacak
   schedule:
     - cron: '0 0 * * 1'  # Her Pazartesi 00:00 UTC'de çalışır
-  
   push:
-    branches:
-      - main
-  pull_request:
     branches:
       - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    permissions:
-      packages: write
-      contents: read
 
     steps:
       - name: Checkout code
@@ -33,13 +26,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image to GHCR
+      - name: Build Docker image with KVM
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}/3x-ui:latest
+          tags: ghcr.io/${{ github.repository }}/kvm-docker:latest
 
-      - name: Test Docker image
+      - name: Run KVM and Docker inside container
         run: |
-          docker run --rm ghcr.io/${{ github.repository }}/3x-ui:latest
+          docker run --rm --privileged ghcr.io/${{ github.repository }}/kvm-docker:latest
