@@ -1,27 +1,25 @@
-# Base image olarak Debian kullanıyoruz
+# Use Debian as the base image
 FROM debian:latest
 
-# Gerekli bağımlılıkları kuruyoruz
+# Install necessary dependencies
 RUN apt-get update && apt-get install -y \
     wget \
     tar \
     bash \
     && rm -rf /var/lib/apt/lists/*
 
-# Çalışma dizini belirliyoruz
+# Set the working directory
 WORKDIR /app
 
-# x-ui tar.gz dosyasını indiriyoruz
+# Download the x-ui tar.gz file
 RUN wget https://github.com/MHSanaei/3x-ui/releases/download/v2.3.15/x-ui-linux-amd64.tar.gz
 
-# İndirilen dosyayı çıkarıyoruz
-RUN tar -xzf x-ui-linux-amd64.tar.gz
+# Extract the downloaded file and remove the tar.gz to save space
+RUN tar -xzf x-ui-linux-amd64.tar.gz && \
+    rm x-ui-linux-amd64.tar.gz
 
-# install.sh çalıştırılabilir hale getiriyoruz ve çalıştırıyoruz
-RUN chmod +x /app/install.sh && ./install.sh
+# Make the x-ui.sh script in the root directory executable
+RUN chmod +x /x-ui.sh
 
-# x-ui.sh dosyasını çalıştırılabilir hale getiriyoruz
-RUN chmod +x /app/x-ui.sh
-
-# Container başlatıldığında x-ui.sh'nin çalışmasını sağlıyoruz
-CMD ["/app/x-ui.sh"]
+# Ensure x-ui.sh runs when the container starts
+CMD ["/x-ui.sh"]
