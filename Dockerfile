@@ -18,8 +18,8 @@ RUN wget https://github.com/MHSanaei/3x-ui/releases/download/v2.3.15/x-ui-linux-
 RUN tar -xzf x-ui-linux-amd64.tar.gz && \
     rm x-ui-linux-amd64.tar.gz
 
-# Make the x-ui.sh script in the root directory executable
-RUN chmod +x /x-ui.sh
+# Make the x-ui.sh script in the /app directory executable
+RUN chmod +x /app/x-ui.sh
 
 # Ensure x-ui.sh runs when the container starts
-CMD ["/x-ui.sh"]
+CMD ["/app/x-ui.sh"]
