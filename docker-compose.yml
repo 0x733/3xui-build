@@ -2,7 +2,7 @@ version: "3"
 
 services:
   3x-ui:
-    image: ghcr.io/0x733/3x-ui:latest
+    image: ghcr.io/0x733/3xui-build/debian-xui:latest  # Updated image
     container_name: 3x-ui
     hostname: yourhostname
     volumes:
