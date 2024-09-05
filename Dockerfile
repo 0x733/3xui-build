@@ -21,12 +21,20 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 RUN git clone https://github.com/MHSanaei/3x-ui.git /app
 
-# Copy the files and set correct permissions (this may depend on the specific setup)
-RUN chmod +x /app/x-ui/x-ui.sh
-RUN cp /app/x-ui/x-ui.service /etc/systemd/system/
+# First check the directory contents to debug the file structure
+RUN ls -al /app
+
+# Check again if the x-ui.sh file exists
+RUN test -f /app/x-ui.sh && echo "x-ui.sh exists" || (echo "x-ui.sh not found" && exit 1)
+
+# Set correct permissions for the x-ui.sh script
+RUN chmod +x /app/x-ui.sh
+
+# Copy the service file to the correct location
+RUN cp /app/x-ui.service /etc/systemd/system/
 
 # Expose necessary ports (2053 is default in the repo)
 EXPOSE 2053
 
-# Start the service
-CMD ["bash", "/app/x-ui/x-ui.sh"]
+# Start the service and log the output
+CMD ["bash", "/app/x-ui.sh"]
