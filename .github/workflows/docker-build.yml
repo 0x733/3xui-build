@@ -34,22 +34,32 @@ jobs:
           tags: ghcr.io/0x733/3xui-build/3x-ui:latest
 
       - name: Run Docker container for basic debugging
+        id: run_container
         run: |
-          docker run --rm ghcr.io/0x733/3xui-build/3x-ui:latest \
+          container_id=$(docker run -d ghcr.io/0x733/3xui-build/3x-ui:latest) \
           && echo "Docker container çalıştırıldı!" \
+          && echo "container_id=$container_id" >> $GITHUB_ENV \
           || echo "Docker container başlatılamadı. Hata ayıklama gerekebilir."
-
+    
       - name: Save container state using Environment Files
+        if: success()
         run: echo "container_state=running" >> $GITHUB_STATE
 
       - name: Set output for container status using Environment Files
+        if: success()
         run: echo "container_output=success" >> $GITHUB_OUTPUT
 
       - name: Check if container starts properly
         run: |
-          docker inspect --format='{{.State.Running}}' ghcr.io/0x733/3xui-build/3x-ui:latest \
+          docker inspect --format='{{.State.Running}}' ${{ env.container_id }} \
           && echo "Container is running." \
           || echo "Container is not running."
 
       - name: List running Docker containers
         run: docker ps
+
+      - name: Stop and remove the Docker container
+        if: env.container_id
+        run: |
+          docker stop ${{ env.container_id }} \
+          && docker rm ${{ env.container_id }}
